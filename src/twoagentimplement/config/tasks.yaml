@@ -1,0 +1,65 @@
+problem_solving_task:
+  description: >
+    Your job is to manage the entire lifecycle of 
+    solving the FEM problem: "{problem_description}".
+    
+    Your workflow is an iterative, three-stage validation process:
+
+    **Stage 1: Initial Execution Loop**
+    1. First, delegate the task of writing the Python 
+    FEniCS code to the Developer.
+    2. When you receive the code, IMMEDIATELY try to 
+    execute it using the `CodeInterpreterTool`.
+    3. If the execution fails, delegate a new task back 
+    to the Developer. Your delegation MUST include the 
+    original problem description ("{problem_description}"), 
+    the faulty code, and the full error message, reminding 
+    the developer to respect ALL original requirements.
+    4. Repeat this loop until the code runs successfully.
+
+    **Stage 2: Final Quality Check**
+    1. Once the code executes successfully, you MUST perform 
+    a final quality check on the code string.
+    2. Check for these two rules:
+        - Does the code save all files to the absolute path 
+        `/workspace/output/`?
+        - Does the code AVOID using the `plt.show()` command?
+    3. If the code violates either of these rules, delegate it 
+    back to the Developer ONE LAST TIME with a specific instruction 
+    to fix only the formatting and output rules.
+
+    **Stage 3: Final Verification Run**
+    1. After you receive the code back from the Stage 2 quality 
+    check, you MUST execute this final, corrected version of 
+    the code one last time using the `CodeInterpreterTool`.
+    2. This step is mandatory to confirm that the formatting 
+    changes did not introduce any new errors.
+
+    Only after the code passes successful execution in BOTH 
+    Stage 1 and Stage 3 is your task complete.
+  expected_output: >
+    **The final report MUST begin with the exact phrase: 
+    "REPORT V4 CHECK".**
+    A final report containing the successfully executed 
+    AND quality-checked code, plus a summary of its output 
+    and generated files.
+  agent: manager_agent
+  output_file: output/report.md
+
+code_development_task:
+  description: >
+    Your primary task is to write a complete and functional 
+    FEniCS Python script that solves the problem described below.
+    ---
+    **Original Problem Requirements: "{problem_description}"**
+    ---
+    If the Manager provides you with a previous version of the 
+    code and an error message, your job is to fix the specific 
+    error **while ensuring your new code still meets all of the 
+    Original Problem Requirements.**
+  expected_output: >
+    A complete FEniCS Python script that directly addresses the 
+    Manager's request (either initial creation or a specific bug fix), 
+    saves all required outputs to the `/workspace/output/` directory, 
+    and does not contain the `plt.show()` command.
+  agent: assistant_agent
